@@ -3,6 +3,7 @@ import './styles/reset.css';
 import './styles/styles.scss';
 
 import { getWeatherData } from './api.js';
+import { toggleTemperatureUnit } from './eventListeners.js';
 
 getWeatherData('New Jersey')
     .then((data) => {

@@ -8,12 +8,13 @@ body {
         serif;
     background-color: #06042e;
     color: #fdffe0;
+    user-select: none;
 
 
 }
 form {
     text-align: center;
-    padding: 20px;
+    padding: 20px 20px 0px 20px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -24,12 +25,18 @@ input[type="text"]{
     color: #fdffe0;
 }
 
-footer p a {
-    color: #009dff;
+
+footer{
+    color: #fdffe0;
+    p a {
+        color: #009dff;
         text-decoration: none;
-    &:hover {
-        color: #f2ff3f;
-        text-decoration: underline;
+
+        &:hover {
+            color: #f2ff3f;
+            text-decoration: underline;   
+        }
+
     }
 }
 
@@ -46,28 +53,35 @@ footer p a {
     padding: 0px 20px 20px 20px;
 
     display: grid;
-    grid-template-columns: 1.7fr 0.3fr 0.2fr 1.8fr;
-    grid-template-rows: 1fr 1fr 0.8fr 1.2fr;
-    grid-auto-rows: 1fr;
-    gap: 0px 0px;
-    grid-auto-flow: column;
-    grid-template-areas:
-        "weather-content weather-content . ."
-        "weather-content weather-content . weather-image"
-        ". . . weather-image"
-        "weather-gif . . .";
+        grid-auto-flow: column;
+        grid-auto-rows: 1fr;
+        grid-template-columns: 2.4fr 0.8fr 0.8fr;
+        grid-template-rows: 0.9fr 1.1fr 1fr 1fr;
+        gap: 0px 0px;
+        grid-template-areas:
+            "weather-content weather-content ."
+            "weather-content weather-content ."
+            ". weather-image weather-image"
+            "weather-gif . .";
 }
 
 .weather-image {
+    justify-self: end;
     grid-area: weather-image;
     background-color: royalblue;
+    height: 150px;
+    width: auto;
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .weather-content {
     grid-area: weather-content;
     // background-color: rosybrown;
 
-    padding: 20px;
+    padding: 10px;
 
     display: flex;
     flex-direction: column;
@@ -76,6 +90,7 @@ footer p a {
     h1 {
             font-size: 3em;
             margin: 0;
+            width: 100vw;
         }
 
     .left-right {
@@ -83,20 +98,24 @@ footer p a {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-    
-        .left{
-            flex:1;
-            border-right: 3px solid #fdffe0;
-            .temperature{
-                font-size: 5em;
-                font-weight: bold;
-                &::after{
-                    content: "°C";
-                    font-size: 0.5em;
-                    padding: 10px 10px 10px 0;
-                    vertical-align: super;
+        border-radius: 20px;
+        padding: 15px;
 
-                }
+        &:hover{
+            cursor: pointer;
+            background-color: rgba($color: white, $alpha: .1);
+        }
+
+        .left{
+            flex: 1;
+            border-right: 3px solid #fdffe0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+
+            .temperature{
+                font-size: 4em;
+                font-weight: bold;
             }
         }
 
@@ -105,15 +124,16 @@ footer p a {
             text-align: right;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: flex-start;
-            margin-left: 35px;
+            height: 100%;
+            padding-left: 30px;
+
             .feels-like-edit{
-                &::after{
-                    content: "°C";
-                    font-size: 0.5em;
-                    padding: 10px 10px 10px 0;
-                    vertical-align: super;
-                }
+            }
+            *{
+                width: 200px;
+                text-align: start;
             }
 
         }
@@ -121,7 +141,39 @@ footer p a {
 
 }
 
+.celsius-after::after {
+    content: "°C";
+    // color: red; 
+    font-size: 0.5em;
+    padding: 10px 10px 10px 0;
+    vertical-align: super;
+}
+
+.fahrenheit-after::after {
+    content: "°F";
+    // color: blue; 
+    font-size: 0.5em;
+    padding: 10px 10px 10px 0;
+    vertical-align: super;
+}
+
+.kph-after::after {
+    content: " km/h";
+}
+
+.mph-after::after {
+    content: " mph";
+}
+
 .weather-gif {
     grid-area: weather-gif;
-    background-color: lightcoral;
+    height: 200px;
+    width: calc(200px * (4/3));
+
+    img.giphy-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;   
+    }
 }
+

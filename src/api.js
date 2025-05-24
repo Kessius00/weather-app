@@ -4,6 +4,8 @@ import thunder from './img/thunder.webp';
 import sunnyClouds from './img/sunnyclouds.webp';
 import clouds from './img/clouds.webp';
 
+import { toggleTemperatureUnit } from './eventListeners.js';
+
 async function getWeatherData(city) {
     const apiKey = 'UGARQTPJ3DS9DB2A8VW2L5JH7';
     // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
@@ -24,6 +26,16 @@ async function getWeatherData(city) {
     }
 }
 
+function capitalizeEachWord(string) {
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    return string
+        .split(' ')
+        .map((word) => capitalizeFirstLetter(word))
+        .join(' ');
+}
+
 class weatherInfo {
     constructor(city) {
         this.city = city;
@@ -31,31 +43,70 @@ class weatherInfo {
 
     async getWeather() {
         const data = await getWeatherData(this.city);
-        this.cityName = data.address;
+        this.cityName = capitalizeEachWord(data.address);
         this.currentConditions = data.currentConditions;
+
+        console.log('DATA: ', data);
 
         // more specific data
         this.tempF = data.currentConditions.temp;
-        this.tempC = (data.currentConditions.temp - 32) * (5 / 9);
+        this.tempC = ((data.currentConditions.temp - 32) * (5 / 9)).toFixed(1); // Convert Fahrenheit to Celsius
         this.feelsLikeF = data.currentConditions.feelslike;
-        this.feelsLikeC = (data.currentConditions.feelslike - 32) * (5 / 9);
+        this.feelsLikeC = (
+            (data.currentConditions.feelslike - 32) *
+            (5 / 9)
+        ).toFixed(1); // Convert Fahrenheit to Celsius
         this.uvIndex = data.currentConditions.uvindex;
 
         this.humidity = data.currentConditions.humidity;
         this.windSpeedMPH = data.currentConditions.windspeed;
-        this.windSpeedKPH = data.currentConditions.windspeed * 1.609344; // Convert mph to kph
+        this.windSpeedKPH = (
+            data.currentConditions.windspeed * 1.609344
+        ).toFixed(1); // Convert mph to kph
 
         this.atTime = data.currentConditions.datetime;
-        this.icon = data.currentConditions.icon;
+        this.condition = data.currentConditions.conditions;
         return data;
     }
 }
 
-const weather = new weatherInfo('New Jersey');
+const weather = new weatherInfo('New jersey');
 weather
     .getWeather()
     .then((data) => {
-        console.log('Weather data:', weather.tempC);
+        consoleData(); // Log the weather data to the console
+        // Update the UI with weather data
+        const cityElement = document.querySelector('.location');
+        const condition = document.querySelector('.condition');
+
+        cityElement.textContent = weather.cityName;
+        condition.textContent = weather.condition;
+
+        const tempElement = document.querySelector('.temperature');
+        const feelsLikeElement = document.querySelector('.feels-like-edit');
+        const windSpeedElement = document.querySelector('.wind-edit');
+
+        const informationPanel = document.querySelector('.left-right');
+        informationPanel.addEventListener('click', () => {
+            toggleTemperatureUnit(weather);
+        });
+
+        if (informationPanel.classList.contains('celsius')) {
+            tempElement.textContent = weather.tempC;
+            feelsLikeElement.textContent = weather.feelsLikeC;
+            windSpeedElement.textContent = weather.windSpeedKPH;
+        } else {
+            tempElement.textContent = weather.tempF;
+            feelsLikeElement.textContent = weather.feelsLikeF;
+            windSpeedElement.textContent = weather.windSpeedMPH;
+        }
+
+        const humidityElement = document.querySelector('.humidity-edit');
+        const uvIndexElement = document.querySelector('.uv-index-edit');
+        humidityElement.textContent = weather.humidity;
+        uvIndexElement.textContent = weather.uvIndex;
+
+        searchGiphy(weather.condition);
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -63,19 +114,9 @@ weather
 
 export { getWeatherData };
 
-searchGiphy('cat');
-button.addEventListener('click', function () {
-    const searchTerm = input.value;
-    searchGiphy(searchTerm);
-    input.value = '';
-});
-
-const img = document.querySelector('.giphy-img');
-const input = document.querySelector('input');
-const button = document.querySelector('button');
-
 async function searchGiphy(searchTerm) {
     try {
+        const img = document.querySelector('.giphy-img');
         if (!searchTerm) {
             alert('Please enter a search term');
             searchTerm = 'clouds'; // Default search term if none provided
@@ -99,4 +140,8 @@ async function searchGiphy(searchTerm) {
     } catch (error) {
         console.log('Error:', error);
     }
+}
+
+function consoleData() {
+    console.log('Weather data:', weather);
 }
