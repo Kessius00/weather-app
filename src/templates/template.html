@@ -5,5 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title></title>
   </head>
-  <body></body>
+<body>
+    <div class="content">
+        <header>
+            <form id="search-form">
+                <input type="text" id="city-input" name="city" placeholder="Enter city name" required
+                    style="padding: 10px; width: 70%; max-width: 300px; border: 1px solid #ccc; border-radius: 5px; ">
+                <button type="submit"
+                    style="padding: 10px 15px; margin-left: 5px; border: none; border-radius: 5px; cursor: pointer;">
+                    Search
+                </button>
+            </form>
+        </header>
+
+        <main class="container">
+                <div class="weather-content">
+                    <p class="condition">sunny</p>  
+                    <h1 class="location">City</h1>
+                    <div class="left-right">
+                        <div class="left">
+                            <span class="temperature">10</span>
+                        </div>
+                        <div class="right">
+                            <p class="feels-like">feels like: <span class="feels-like-edit">7</span></p>
+                            <p class="wind"> wind: <span class="wind-edit">5 m/s</span></p>
+                            <p class="humidity">humidity <span class="humidity-edit">82</span>%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="weather-image"><img class="weather-image-update"></div>
+                <div class="weather-gif"><img class="giphy-img"></div>
+        </main>
+
+        <footer>
+            <p style="text-align: center; font-size: 14px; color: #555;">
+                &copy; 2025 Weather App. Made by <a href="https://github.com/Kessius00" target="_blank">Kessius</a>
+            </p>
+        </footer>
+    </div>
+</body>
+  
 </html>
