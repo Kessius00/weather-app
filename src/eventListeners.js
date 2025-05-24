@@ -1,12 +1,7 @@
-// button.addEventListener('click', function () {
-//     const searchTerm = input.value;
-//     searchGiphy(searchTerm);
-//     input.value = '';
-// });
+import { safeChangeCity } from './api';
 
-const informationPanel = document.querySelector('.left-right');
-
-function toggleTemperatureUnit(weather) {
+export function toggleTemperatureUnit(weather) {
+    const informationPanel = document.querySelector('.left-right');
     const tempElement = document.querySelector('.temperature');
     const feelsLikeElement = document.querySelector('.feels-like-edit');
     const windSpeedElement = document.querySelector('.wind-edit');
@@ -49,5 +44,31 @@ function toggleTemperatureUnit(weather) {
     }
 }
 
+function removeEventListeners() {
+    const informationPanel = document.querySelector('.left-right');
+    // Remove all click event listeners from the information panel
+    const newPanel = informationPanel.cloneNode(true);
+    informationPanel.parentNode.replaceChild(newPanel, informationPanel);
+}
 // informationPanel.addEventListener('click', toggleTemperatureUnit);
-export { toggleTemperatureUnit };
+
+const searchButton = document.querySelector('.search-button');
+const form = document.querySelector('#search-form');
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    removeEventListeners(); // Remove previous event listeners to prevent duplicates
+    handleSearch();
+    form.reset(); // Reset the form after submission
+});
+
+function handleSearch() {
+    const searchInput = document.querySelector('#city-input');
+    const cityName = searchInput.value.trim(); // Get the input value and trim whitespace
+
+    if (cityName) {
+        safeChangeCity(cityName);
+    } else {
+        console.error('Please enter a valid city name');
+    }
+}

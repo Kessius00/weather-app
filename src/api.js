@@ -1,10 +1,13 @@
-// importing images
-import cloudIncoming from './img/cloudincoming.webp';
-import thunder from './img/thunder.webp';
-import sunnyClouds from './img/sunnyclouds.webp';
-import clouds from './img/clouds.webp';
-
 import { toggleTemperatureUnit } from './eventListeners.js';
+function capitalizeEachWord(string) {
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    return string
+        .split(' ')
+        .map((word) => capitalizeFirstLetter(word))
+        .join(' ');
+}
 
 async function getWeatherData(city) {
     const apiKey = 'UGARQTPJ3DS9DB2A8VW2L5JH7';
@@ -24,16 +27,6 @@ async function getWeatherData(city) {
         console.error('Error fetching weather data:', error);
         throw error;
     }
-}
-
-function capitalizeEachWord(string) {
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-    return string
-        .split(' ')
-        .map((word) => capitalizeFirstLetter(word))
-        .join(' ');
 }
 
 class weatherInfo {
@@ -70,49 +63,55 @@ class weatherInfo {
     }
 }
 
-const weather = new weatherInfo('New jersey');
-weather
-    .getWeather()
-    .then((data) => {
-        consoleData(); // Log the weather data to the console
-        // Update the UI with weather data
-        const cityElement = document.querySelector('.location');
-        const condition = document.querySelector('.condition');
+async function changeCity(city) {
+    const weather = new weatherInfo(city);
+    const data = await weather.getWeather();
+    if (!data) {
+        throw new Error('Weather data not found for the specified city');
+    }
 
-        cityElement.textContent = weather.cityName;
-        condition.textContent = weather.condition;
+    const cityElement = document.querySelector('.location');
+    const condition = document.querySelector('.condition');
 
-        const tempElement = document.querySelector('.temperature');
-        const feelsLikeElement = document.querySelector('.feels-like-edit');
-        const windSpeedElement = document.querySelector('.wind-edit');
+    cityElement.textContent = weather.cityName;
+    condition.textContent = weather.condition;
 
-        const informationPanel = document.querySelector('.left-right');
-        informationPanel.addEventListener('click', () => {
-            toggleTemperatureUnit(weather);
-        });
+    const tempElement = document.querySelector('.temperature');
+    const feelsLikeElement = document.querySelector('.feels-like-edit');
+    const windSpeedElement = document.querySelector('.wind-edit');
 
-        if (informationPanel.classList.contains('celsius')) {
-            tempElement.textContent = weather.tempC;
-            feelsLikeElement.textContent = weather.feelsLikeC;
-            windSpeedElement.textContent = weather.windSpeedKPH;
-        } else {
-            tempElement.textContent = weather.tempF;
-            feelsLikeElement.textContent = weather.feelsLikeF;
-            windSpeedElement.textContent = weather.windSpeedMPH;
-        }
+    const informationPanel = document.querySelector('.left-right');
 
-        const humidityElement = document.querySelector('.humidity-edit');
-        const uvIndexElement = document.querySelector('.uv-index-edit');
-        humidityElement.textContent = weather.humidity;
-        uvIndexElement.textContent = weather.uvIndex;
-
-        searchGiphy(weather.condition);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
+    // remove prior event listeners to prevent duplicates
+    informationPanel.addEventListener('click', () => {
+        toggleTemperatureUnit(weather);
     });
 
-export { getWeatherData };
+    if (informationPanel.classList.contains('celsius')) {
+        tempElement.textContent = weather.tempC;
+        feelsLikeElement.textContent = weather.feelsLikeC;
+        windSpeedElement.textContent = weather.windSpeedKPH;
+    } else {
+        tempElement.textContent = weather.tempF;
+        feelsLikeElement.textContent = weather.feelsLikeF;
+        windSpeedElement.textContent = weather.windSpeedMPH;
+    }
+
+    const humidityElement = document.querySelector('.humidity-edit');
+    const uvIndexElement = document.querySelector('.uv-index-edit');
+    humidityElement.textContent = weather.humidity;
+    uvIndexElement.textContent = weather.uvIndex;
+
+    searchGiphy(weather.condition);
+}
+
+function safeChangeCity(city) {
+    changeCity(city).catch((error) => {
+        console.error('Error :', error);
+    });
+}
+
+export { getWeatherData, safeChangeCity };
 
 async function searchGiphy(searchTerm) {
     try {
@@ -145,3 +144,5 @@ async function searchGiphy(searchTerm) {
 function consoleData() {
     console.log('Weather data:', weather);
 }
+
+safeChangeCity('New Jersey');
