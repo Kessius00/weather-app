@@ -183,3 +183,18 @@ footer{
     }
 }
 
+.error{
+    border: red 2px solid;
+    background-color: rgba($color: red, $alpha: .3);
+}
+
+.error-message {
+    color: red;
+    font-size: 1.2em;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.visible {
+    display: block;
+}

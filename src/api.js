@@ -111,6 +111,17 @@ function safeChangeCity(city) {
     });
 }
 
+function cityNotFound() {
+    const input = document.querySelector('#city-input');
+    const errorMessage = document.querySelector('.error-message');
+
+    errorMessage.textContent = 'City not found. Please try again.';
+
+    errorMessage.classList.add('visible');
+
+    input.classList.add('error');
+}
+
 export { getWeatherData, safeChangeCity };
 
 async function searchGiphy(searchTerm) {
