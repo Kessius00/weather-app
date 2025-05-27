@@ -10,7 +10,7 @@ function capitalizeEachWord(string) {
 }
 
 async function getWeatherData(city) {
-    const apiKey = 'UGARQTPJ3DS9DB2A8VW2L5JH7';
+    const apiKey = '123';
     // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     const apiUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?unitGroup=us&key=${apiKey}&contentType=json`;
     if (!city) {
@@ -131,7 +131,7 @@ async function searchGiphy(searchTerm) {
             alert('Please enter a search term');
             searchTerm = 'clouds'; // Default search term if none provided
         }
-        const apiKey = 'GGZrGXwqmcr4R1vjq15pkUEGaTdrOHlT';
+        const apiKey = '123';
 
         const response = await fetch(
             `https://api.giphy.com/v1/gifs/translate?api_key=${apiKey}&s=${searchTerm}`,
